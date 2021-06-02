@@ -1,0 +1,93 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="border p-3 shadow">
+                <h4>Add Customer Data</h4>
+                <hr>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input type="submit" value="Add Customer" style="background-color: #7cfc00">
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <canvas id="myChart" width="400" height="300"></canvas>
+            <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for month in months %}
+                                '{{ month }}',
+                             {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Spending Habits',
+                        data: [{% for month_income in income %}
+                                    {{ month_income }},
+                               {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }, {
+                        label: 'Spending Habits',
+                        data: [{% for expense in expenses %}
+                                    {{ expense }},
+                               {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxis: [{
+                            stacked: true
+                        }],
+                        xAxis: [{
+                            stacked: true
+                        }]
+                    }
+                }
+            });
+            </script>
+        </div>
+    </div>
+{% endblock %}
+
